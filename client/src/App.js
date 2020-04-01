@@ -10,9 +10,7 @@ const url = `http://localhost:${PORT}`
 
 const socket = openSocket('http://localhost:9000');
 
-socket.on('click', (msg) => {
-    alert('click')
-});
+
 
 export default class App extends React.Component{
     constructor(){
@@ -40,32 +38,39 @@ export default class App extends React.Component{
         const globDiff = toTime - fromTime
         let curDiff = this.time - fromTime
 
-        if(curDiff > globDiff)curDiff = globDiff
+        if(curDiff < globDiff){
 
         const factor = globDiff / curDiff
 
         const diffX = toX - fromX
         const diffY = toY - fromY
 
-        const x = fromX + diffX * factor
-        const y = fromY + diffY * factor
+        const x = fromX + (diffX / factor)
+        const y = fromY + (diffY / factor)
         return {x, y}
-
+        }
+        else return {x: toX, y: toY}
     }
 
     canvasClick = async (event) => {
-        socket.emit('click');
 
-        const {currentCube} = this.state
+
+        const {currentCube, cubes} = this.state
 
         const {pageX, pageY} = event
 
+        const cube = cubes.find(c => c.id === currentCube)
+        const {x, y} = this.getCoords(cube)
+
         await axios.post(`${url}/change?id=${currentCube}`, {
-            fromX: 0,
-            fromY: 0,
+            fromX: x,
+            fromY: y,
             toX: pageX,
             toY: pageY,
         })
+
+        socket.emit('click');
+
     }
     drawLoop = () => {
         const {cubes} = this.state
@@ -92,6 +97,10 @@ export default class App extends React.Component{
         this.getCubes()
         this.c = document.getElementById('canvas')
         this.ctx = this.c.getContext('2d')
+
+        socket.on('click', (msg) => {
+            this.getCubes()
+        });
 
         requestAnimationFrame(this.drawLoop)
 /*
