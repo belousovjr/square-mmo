@@ -2,15 +2,16 @@ import React from 'react';
 import './App.css';
 import axios from 'axios'
 
-import openSocket from 'socket.io-client';
+/*import openSocket from 'socket.io-client';*/
 
 
 const PORT = process.env.PORT || 3000;
 
+const hostname = window.location.hostname
 
-const url = `http://${window.location.hostname}:${PORT}`
+const url = `http://${hostname}:${PORT}`
 
-const socket = openSocket(`http://${window.location.hostname}:9000`);
+/*const socket = openSocket.connect(`http://${hostname}:9000`)//openSocket(`http://${hostname}:9000`);*/
 
 
 
@@ -65,6 +66,8 @@ export default class App extends React.Component{
         const {pageX, pageY} = event
 
         const cube = cubes.find(c => c.id === currentCube)
+
+        if(cube){
         const {x, y} = this.getCoords(cube)
 
         await axios.post(`${url}/change?id=${currentCube}`, {
@@ -73,8 +76,8 @@ export default class App extends React.Component{
             toX: pageX,
             toY: pageY,
         })
-
-        socket.emit('click');
+}
+      //  socket.emit('click');
 
     }
     drawLoop = () => {
@@ -118,9 +121,10 @@ export default class App extends React.Component{
         this.c = document.getElementById('canvas')
         this.ctx = this.c.getContext('2d')
 
-        socket.on('click', (msg) => {
+       /* socket.on('click', (msg) => {
+            console.log('CLICK')
             this.getCubes()
-        });
+        });*/
 
         requestAnimationFrame(this.drawLoop)
     }

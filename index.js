@@ -4,7 +4,7 @@ const path = require('path')
 const PORT = process.env.PORT || 3000;
 const mysql = require("mysql2");
 const jsonParser = express.json();
-const io = require('socket.io')();
+//const io = require('socket.io')();
 
 const connection = mysql.createConnection({
     host: "remotemysql.com",
@@ -77,7 +77,7 @@ app.post('/change', jsonParser, (req,res) => {
 app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
-
+/*
 io.on('connection', function(socket){
     console.log('подключен юзер')
     socket.on('click', function(){
@@ -87,7 +87,7 @@ io.on('connection', function(socket){
 
 
 io.listen(9000);
-
+*/
 app.listen(PORT, function(){
     console.log(`приложение на порту ${PORT}!`)
 });
