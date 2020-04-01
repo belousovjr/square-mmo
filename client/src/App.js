@@ -14,6 +14,7 @@ export default class App extends React.Component{
 
         try {
             const {data} = await axios.get(`${url}/get`)
+            alert(data)
             this.setState({cubes: data})
 
         }
