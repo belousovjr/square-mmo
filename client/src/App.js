@@ -19,6 +19,9 @@ export default class App extends React.Component{
         this.state = {cubes: [], currentCube: 1}
         this.c = null
         this.ctx = null
+        this.colors = [
+            'red', 'orange', 'green'
+        ]
     }
     getCubes = async () => {
 
@@ -73,7 +76,7 @@ export default class App extends React.Component{
 
     }
     drawLoop = () => {
-        const {cubes} = this.state
+        const {cubes, currentCube} = this.state
         this.time = Date.now()
 
         this.ctx.beginPath();
@@ -85,9 +88,24 @@ export default class App extends React.Component{
 
             const {x, y} = this.getCoords(cube)
 
+
             this.ctx.beginPath();
-            this.ctx.fillStyle = 'orange'
+            this.ctx.fillStyle = this.colors[cube.id]
             this.ctx.rect(x, y, 100, 100);
+            this.ctx.fill();
+
+                if(cube.id == currentCube){
+                this.ctx.beginPath();
+                this.ctx.lineWidth = 7
+                this.ctx.strokeStyle = 'red'
+                this.ctx.rect(x, y, 100, 100);
+                this.ctx.stroke();
+            }
+
+            this.ctx.beginPath();
+            this.ctx.fillStyle = 'white'
+            this.ctx.font = "30px Arial";
+            this.ctx.fillText(cube.name, x , y + 45);
             this.ctx.fill();
         })
 
@@ -103,20 +121,17 @@ export default class App extends React.Component{
         });
 
         requestAnimationFrame(this.drawLoop)
-/*
-        this.ctx.beginPath();
-        this.ctx.fillStyle = 'black'
-        this.ctx.rect(0, 0, this.c.width, this.c.height);
-        this.ctx.fill();
-        */
     }
 
     render(){
-        const {cubes} = this.state
+        const {cubes, currentCube} = this.state
         return (
             <div>
                 <canvas onClick={this.canvasClick}  width={1500} height={700} id="canvas" />
-                {cubes.map(cube => <div key={cube.id}>{cube.name}</div>)}
+                <br />
+                {cubes.map(cube => {
+                    const selectClass = cube.id === currentCube ? 'select' : ''
+                    return <div style={{backgroundColor: this.colors[cube.id]}} onClick={() => {this.setState({currentCube: cube.id})}} className={`type ${selectClass}`} key={cube.id}>{cube.name}</div>})}
             </div>
         )
     }

@@ -1,3 +1,9 @@
-#canvas{
+.type{
+    padding: 1rem;
+    background-color: yellow;
+    display: inline-block;
+}
 
+.select {
+    border: red solid 0.5rem;
 }
