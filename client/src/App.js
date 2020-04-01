@@ -15,7 +15,7 @@ const protocol = window.location.protocol
 
 const url = `${protocol}//${hostname}:${PORT}`
 
-//const socket = openSocket.connect(url)//openSocket(`http://${hostname}:9000`);*/
+const socket = openSocket.connect(url)//openSocket(`http://${hostname}:9000`);*/
 
 
 
