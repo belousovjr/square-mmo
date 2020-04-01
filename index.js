@@ -86,8 +86,10 @@ io.on('connection', function(socket){
 });
 
 
-io.listen(9000)
+io.listen(9000, function(){
+    console.log(`сокеты на порту ${PORT}!`)
+});
 
 app.listen(PORT, function(){
-    console.log(`Listening on port ${PORT}!`)
+    console.log(`приложение на порту ${PORT}!`)
 });
