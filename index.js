@@ -3,7 +3,7 @@ const app = express();
 const path = require('path')
 const PORT = process.env.PORT || 3000;
 const mysql = require("mysql2");
-
+const jsonParser = express.json();
 
 const connection = mysql.createConnection({
     host: "remotemysql.com",
@@ -46,6 +46,27 @@ app.get('/get', (req,res) => {
 
     connection.query(sql, function(err, results) {
         if(err) console.log(err);
+        res.json(results);
+    });
+
+
+});
+
+app.post('/change', jsonParser, (req,res) => {
+
+    const time = Date.now()
+
+    const {id} = req.query
+    const {fromX, toX, fromY, toY} = req.body
+
+    const sql = `UPDATE cubes SET fromX=?, fromY=?, fromTime=?, toX=?, toY=?, toTime=? WHERE id=?`;
+
+    const diffTime = Math.floor(Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2)))
+
+    const data = [fromX, fromY, time, toX, toY, time + diffTime, id];
+
+    connection.query(sql, data, function(err, results) {
+        if(err) res.json(err);
         res.json(results);
     });
 

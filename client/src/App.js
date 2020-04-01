@@ -8,7 +8,7 @@ const url = `http://localhost:${PORT}`
 export default class App extends React.Component{
     constructor(){
         super()
-        this.state = {cubes: []}
+        this.state = {cubes: [], currentCube: 1}
         this.c = null
         this.ctx = null
     }
@@ -23,6 +23,18 @@ export default class App extends React.Component{
             console.log(e)
         }
 
+    }
+    canvasClick = async (event) => {
+        const {currentCube} = this.state
+
+        const {pageX, pageY} = event
+
+        await axios.post(`${url}/change?id=${currentCube}`, {
+            fromX: 0,
+            fromY: 0,
+            toX: pageX,
+            toY: pageY,
+        })
     }
     drawLoop = () => {
         const {cubes} = this.state
@@ -59,7 +71,7 @@ export default class App extends React.Component{
         const {cubes} = this.state
         return (
             <div>
-                <canvas  width={1500} height={700} id="canvas" />
+                <canvas onClick={this.canvasClick}  width={1500} height={700} id="canvas" />
                 {cubes.map(cube => <div key={cube.id}>{cube.name}</div>)}
             </div>
         )
