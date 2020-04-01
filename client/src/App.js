@@ -54,6 +54,8 @@ export default class App extends React.Component {
   };
 
   canvasClick = async event => {
+      this.loading = true;
+
     const { currentCube, cubes } = this.state;
 
     const { pageX, pageY } = event;
