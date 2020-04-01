@@ -4,6 +4,7 @@ const path = require('path')
 const PORT = process.env.PORT || 3000;
 const mysql = require("mysql2");
 const jsonParser = express.json();
+const io = require('socket.io')();
 
 const connection = mysql.createConnection({
     host: "remotemysql.com",
@@ -77,11 +78,15 @@ app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
-/*
-app.get('/', (req,res) =>{
-    res.send('<h1>Hello!!!!</h1>');
-});*/
+io.on('connection', function(socket){
 
+    socket.on('click', function(){
+        socket.emit('click')
+    });
+});
+
+
+io.listen(9000)
 
 app.listen(PORT, function(){
     console.log(`Listening on port ${PORT}!`)
