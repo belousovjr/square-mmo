@@ -5,9 +5,11 @@ import axios from 'axios'
 /*import openSocket from 'socket.io-client';*/
 
 
-const PORT = process.env.PORT || 3000;
+
 
 const hostname = window.location.hostname
+
+const PORT = hostname === 'localhost' ? 3000 : ''
 
 const protocol = window.location.protocol
 
