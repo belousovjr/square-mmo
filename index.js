@@ -14,7 +14,7 @@ const connection = mysql.createConnection({
     user: "dBsEgkNf7l",
     database: "dBsEgkNf7l",
     password: "knNJ8RFeGG"
-});
+});/*
 connection.connect(function(err){
     if (err) {
         return console.error("Ошибка: " + err.message);
@@ -23,6 +23,13 @@ connection.connect(function(err){
         console.log("Подключение к серверу MySQL успешно установлено");
     }
 });
+connection.end(function(err) {
+    if (err) {
+        return console.log("Ошибка: " + err.message);
+    }
+    console.log("Подключение закрыто");
+});*/
+
 
 const app = express().use(function (req, res, next) {
 
