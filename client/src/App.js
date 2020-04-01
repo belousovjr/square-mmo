@@ -77,8 +77,8 @@ export default class App extends React.Component{
         await axios.post(`${url}/change?id=${currentCube}`, {
             fromX: x,
             fromY: y,
-            toX: pageX,
-            toY: pageY,
+            toX: pageX -50,
+            toY: pageY -50,
         })
 }
         socket.emit('click');

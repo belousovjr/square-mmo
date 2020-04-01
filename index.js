@@ -59,7 +59,7 @@ const app = express().use(function (req, res, next) {
 
     const sql = `UPDATE cubes SET fromX=?, fromY=?, fromTime=?, toX=?, toY=?, toTime=? WHERE id=?`;
 
-    const diffTime = Math.floor(Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2)))*8
+    const diffTime = Math.floor(Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2)))*10
 
     const data = [fromX, fromY, time, toX, toY, time + diffTime, id];
 
