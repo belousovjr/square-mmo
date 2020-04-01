@@ -79,16 +79,14 @@ app.get('*', (req,res) =>{
 });
 
 io.on('connection', function(socket){
-
+    console.log('подключен юзер')
     socket.on('click', function(){
         io.emit('click')
     });
 });
 
 
-io.listen(9000, function(){
-    console.log(`сокеты на порту ${PORT}!`)
-});
+io.listen(9000);
 
 app.listen(PORT, function(){
     console.log(`приложение на порту ${PORT}!`)
