@@ -9,7 +9,9 @@ const PORT = process.env.PORT || 3000;
 
 const hostname = window.location.hostname
 
-const url = `http://${hostname}:${PORT}`
+const protocol = window.location.protocol
+
+const url = `${protocol}//${hostname}:${PORT}`
 
 /*const socket = openSocket.connect(`http://${hostname}:9000`)//openSocket(`http://${hostname}:9000`);*/
 
