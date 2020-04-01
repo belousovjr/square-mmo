@@ -6,9 +6,11 @@ import openSocket from 'socket.io-client';
 
 
 const PORT = process.env.PORT || 3000;
-const url = `http://localhost:${PORT}`
 
-const socket = openSocket('http://localhost:9000');
+
+const url = `http://${window.location.hostname}:${PORT}`
+
+const socket = openSocket(`http://${window.location.hostname}:9000`);
 
 
 
