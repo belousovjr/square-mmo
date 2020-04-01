@@ -81,7 +81,7 @@ export default class App extends React.Component{
             toY: pageY,
         })
 }
-      //  socket.emit('click');
+        socket.emit('click');
 
     }
     drawLoop = () => {
@@ -125,10 +125,10 @@ export default class App extends React.Component{
         this.c = document.getElementById('canvas')
         this.ctx = this.c.getContext('2d')
 
-       /* socket.on('click', (msg) => {
+        socket.on('click', (msg) => {
             console.log('CLICK')
             this.getCubes()
-        });*/
+        });
 
         requestAnimationFrame(this.drawLoop)
     }
