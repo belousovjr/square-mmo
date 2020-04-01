@@ -1,9 +1,12 @@
 const express = require('express');
-const app = express();
+
+const http = require('http');
+
 const path = require('path')
 const PORT = process.env.PORT || 3000;
 const mysql = require("mysql2");
 const jsonParser = express.json();
+
 //const io = require('socket.io')();
 
 const connection = mysql.createConnection({
@@ -21,7 +24,7 @@ connection.connect(function(err){
     }
 });
 
-app.use(function (req, res, next) {
+const app = express().use(function (req, res, next) {
 
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -37,11 +40,7 @@ app.use(function (req, res, next) {
 
     // Pass to next layer of middleware
     next()
-});
-
-app.use(express.static(path.join(__dirname, 'client/build')));
-
-app.get('/get', (req,res) => {
+}).use(express.static(path.join(__dirname, 'client/build'))).get('/get', (req,res) => {
 
     const sql = `SELECT * FROM cubes`;
 
@@ -51,9 +50,7 @@ app.get('/get', (req,res) => {
     });
 
 
-});
-
-app.post('/change', jsonParser, (req,res) => {
+}).post('/change', jsonParser, (req,res) => {
 
     const time = Date.now()
 
@@ -74,9 +71,19 @@ app.post('/change', jsonParser, (req,res) => {
 
 });
 
+const server = http.createServer(app);
+const io = require('socket.io').listen(server);
+
+
+io.on('connection', (socket) => {
+    console.log('Client connected');
+    socket.on('disconnect', () => console.log('Client disconnected'));
+});
+
+/*
 app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
+});*/
 /*
 io.on('connection', function(socket){
     console.log('подключен юзер')
@@ -88,6 +95,6 @@ io.on('connection', function(socket){
 
 io.listen(9000);
 */
-app.listen(PORT, function(){
+server.listen(PORT, function(){
     console.log(`приложение на порту ${PORT}!`)
 });

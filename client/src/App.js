@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import axios from 'axios'
 
-/*import openSocket from 'socket.io-client';*/
+import openSocket from 'socket.io-client';
 
 
 
@@ -15,7 +15,7 @@ const protocol = window.location.protocol
 
 const url = `${protocol}//${hostname}:${PORT}`
 
-/*const socket = openSocket.connect(`http://${hostname}:9000`)//openSocket(`http://${hostname}:9000`);*/
+//const socket = openSocket.connect(url)//openSocket(`http://${hostname}:9000`);*/
 
 
 
