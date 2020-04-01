@@ -81,7 +81,7 @@ app.get('*', (req,res) =>{
 io.on('connection', function(socket){
 
     socket.on('click', function(){
-        socket.emit('click')
+        io.emit('click')
     });
 });
 
