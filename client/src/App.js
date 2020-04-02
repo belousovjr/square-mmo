@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-import axios from "axios";
 
 import openSocket from "socket.io-client";
 
@@ -24,17 +23,6 @@ export default class App extends React.Component {
     this.colors = ["red", "orange", "green"];
     this.loading = true;
   }
-  getCubes = async () => {
-    try {
-      this.loading = true;
-      const { data } = await axios.get(`${url}/get`);
-      this.setState({ cubes: data });
-    } catch (e) {
-      console.log(e);
-    } finally {
-      this.loading = false;
-    }
-  };
   getCoords = cube => {
     const { fromTime, toTime, fromX, toX, fromY, toY } = cube;
 
@@ -53,8 +41,8 @@ export default class App extends React.Component {
     } else return { x: toX, y: toY };
   };
 
-  canvasClick = async event => {
-      this.loading = true;
+  canvasClick = event => {
+    this.loading = true;
 
     const { currentCube, cubes } = this.state;
 
@@ -65,14 +53,15 @@ export default class App extends React.Component {
     if (cube) {
       const { x, y } = this.getCoords(cube);
 
-      await axios.post(`${url}/change?id=${currentCube}`, {
+      const data = {
         fromX: x,
         fromY: y,
         toX: pageX - 50,
         toY: pageY - 50
-      });
+      };
+
+      socket.emit("click", { id: currentCube, data });
     }
-    socket.emit("click");
   };
   drawLoop = () => {
     if (!this.loading) {
@@ -92,7 +81,7 @@ export default class App extends React.Component {
         this.ctx.rect(x, y, 100, 100);
         this.ctx.fill();
 
-        if (cube.id == currentCube) {
+        if (cube.id === currentCube) {
           this.ctx.beginPath();
           this.ctx.lineWidth = 7;
           this.ctx.strokeStyle = "red";
@@ -110,13 +99,12 @@ export default class App extends React.Component {
     requestAnimationFrame(this.drawLoop);
   };
   componentDidMount() {
-    this.getCubes();
     this.c = document.getElementById("canvas");
     this.ctx = this.c.getContext("2d");
 
-    socket.on("click", msg => {
-      console.log("CLICK");
-      this.getCubes();
+    socket.on("click", data => {
+      this.setState({ cubes: data });
+      this.loading = false;
     });
 
     requestAnimationFrame(this.drawLoop);
